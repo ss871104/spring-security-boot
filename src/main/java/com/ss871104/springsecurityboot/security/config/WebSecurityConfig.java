@@ -25,8 +25,11 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                // turn off csrf, or will be 403 forbidden
                 .csrf().disable()
-                .headers().frameOptions().disable().and()
+                // to allow <frame> elements (h2 console UI) from the same origin
+                .headers(headers -> headers
+                        .frameOptions(frameOptions -> frameOptions.sameOrigin()))
                 .authorizeRequests()
                 .antMatchers("/api/auth/*").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
@@ -36,10 +39,9 @@ public class WebSecurityConfig {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
-                .authenticationEntryPoint(unauthorizedHandler)
-                .accessDeniedHandler(accessDeniedHandler).and()
+                    .authenticationEntryPoint(unauthorizedHandler)
+                    .accessDeniedHandler(accessDeniedHandler).and()
                 .httpBasic();
-
 
         return http.build();
     }

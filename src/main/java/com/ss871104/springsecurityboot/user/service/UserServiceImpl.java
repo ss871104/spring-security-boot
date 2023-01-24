@@ -9,9 +9,8 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,18 +26,15 @@ public class UserServiceImpl implements UserService {
         System.out.println("此方法被使用");
         List<User> userList = userRepository.findAll();
 
-        List<UserResponse> userResponseList = new ArrayList<>();
-        userList.stream().forEach((x -> {
-            UserResponse userResponse = UserResponse.builder()
+        return userList.stream().map(x ->
+            UserResponse.builder()
                     .id(x.getId())
                     .name(x.getName())
                     .username(x.getUsername())
                     .email(x.getEmail())
                     .role(x.getRole())
-                    .build();
-            userResponseList.add(userResponse);
-        }));
-        return userResponseList;
+                    .build())
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.ss871104.springsecurityboot.security.jwt;
 
-import com.ss871104.springsecurityboot.security.jwt.JwtTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
